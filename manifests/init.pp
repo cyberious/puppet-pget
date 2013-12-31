@@ -37,12 +37,9 @@
 #
 define pget (
   $source,              #: the source file location, supports local files, puppet://, http://, https://, ftp://
-  $target      = undef, #: the target staging directory, if unspecified ${staging::path}/${caller_module_name}
-  $username    = undef, #: https or ftp username
-  $certificate = undef, #: https certificate file
-  $password    = undef, #: https or ftp user password or https certificate password
-  $timeout     = undef, #: the the time to wait for the file transfer to complete
-  $subdir      = $caller_module_name){
+  $target      = undef, #: the target stage directory
+  $username    = undef, #: Username to be passed
+  $password    = undef, #: password needed){
 
   validate_string($source)
   validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
