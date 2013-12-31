@@ -64,7 +64,7 @@ define pget (
 
   exec{"Download-${filename}":
     provider  => powershell,
-    command   => $command,
+    command   => $cmd,
   }
 
 
