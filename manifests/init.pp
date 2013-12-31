@@ -35,7 +35,7 @@
 # Copyright 2013 Travis F, unless otherwise noted.
 #
 define pget (
-  $source,              #: the source file location, supports local files, puppet://, http://, https://, ftp://
+  $source,              #: the source file location, supports local files, http://, https://, ftp://
   $target      = undef, #: the target stage directory
   $username    = undef, #: Username to be passed
   $password    = undef, #: password needed
