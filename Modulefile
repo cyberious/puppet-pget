@@ -1,4 +1,4 @@
-name    'puppet-pget'
+name    'cyberious-pget'
 version '0.1.0'
 source 'http://github.com/cyberious/puppet-pget'
 author 'Travis F'

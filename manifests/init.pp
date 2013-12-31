@@ -57,7 +57,7 @@ define pget (
     validate_re($password,['(\w|\W)+'],"Password must be supplied")
     validate_string($username)
     validate_re($username,['(\w|\W)+'],"Username must be supplied")
-    $cmd  = "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');\$wc.DownloadFile(${source},${target_file})"
+    $cmd  = "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');\$wc.DownloadFile('${source}','${target_file}')"
   }else{
     $cmd = "\$wc = New-Object System.Net.WebClient; \$wc.DownloadFile('${source}','${target_file}')"
   }

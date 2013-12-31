@@ -5,22 +5,22 @@ describe 'pget' do
   let(:facts){{:operatingsystem => "Windows"}}
 
   shared_examples 'without user pass' do |protocol|
-    let(:params){{:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software/"}}
+    let(:params){{:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software"}}
     it{
-      should contain_exec('Download-puppet-3.4.1.msi'){
-        with_provider('powershell')
-        with_command("\$wc = New-Object System.Net.WebClient; \$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')")
-      }
+      should contain_exec('Download-puppet-3.4.1.msi').with({
+        'provider' => 'powershell',
+        'command' => "\$wc = New-Object System.Net.WebClient; \$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+      })
     }
   end
 
   shared_examples 'with user pass' do |protocol|
-    let(:params){{:password => 'testme',:username => 'testuser',:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software/"}}
+    let(:params){{:password => 'testme',:username => 'testuser',:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software"}}
     it{
-      should contain_exec('Download-puppet-3.4.1.msi'){
-        with_provider('powershell')
-        with_command("\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('testuser','testme');\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')")
-      }
+      should contain_exec('Download-puppet-3.4.1.msi').with({
+        'provider' => 'powershell',
+        'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('testuser','testme');\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+      })
     }
   end
 
