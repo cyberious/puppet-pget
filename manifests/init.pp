@@ -41,15 +41,29 @@ define pget (
   $username    = undef, #: https or ftp username
   $certificate = undef, #: https certificate file
   $password    = undef, #: https or ftp user password or https certificate password
-  $environment = undef, #: environment variable for settings such as http_proxy, https_proxy, of ftp_proxy
   $timeout     = undef, #: the the time to wait for the file transfer to complete
   $subdir      = $caller_module_name){
 
-  $http_get           = "powershell.exe -Command \"$wc = New-Object System.Net.WebClient; $wc.DownloadFile('${source}','${target_file}')\""
-  $ftp_get            = $http_get
-  $http_get_password  = "powershell.exe -Command \"$wc = (New-Object System.Net.WebClient);$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');$wc.DownloadFile(${source},${target_file})\""
-  $ftp_get_password   = $http_get_password
+  validate_string($source)
+  validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
+  if $operatingsystem != 'windows'{
+    fail("Unsupported OS ${operatingsystem}")
+  }
 
+  $filename = pget_filename($source)
+  $target_file = "${target}/${filename}"
+  if $password != undef or $username != undef {
+    validate_string($password)
+    validate_string($username)
+    $cmd  = "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');\$wc.DownloadFile(${source},${target_file})"
+  }else{
+    $cmd = "\$wc = New-Object System.Net.WebClient; \$wc.DownloadFile('${source}','${target_file}')"
+  }
+
+  exec{"Download-${filename}":
+    provider  => powershell,
+    command   => $command,
+  }
 
 
 
