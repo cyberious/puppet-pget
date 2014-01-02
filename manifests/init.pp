@@ -38,7 +38,8 @@ define pget (
   $source,              #: the source file location, supports local files, http://, https://, ftp://
   $target      = undef, #: the target stage directory
   $username    = undef, #: Username to be passed
-  $password    = undef, #: password needed
+  $password    = undef, #: password needed,
+  $headerHash  = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
   ){
 
   validate_string($source)
