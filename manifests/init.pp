@@ -63,10 +63,7 @@ define pget (
   exec{"Download-${filename}":
     provider  => powershell,
     command   => $cmd,
+    unless  => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
   }
-
-
-
-
 
 }

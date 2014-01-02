@@ -14,3 +14,12 @@ Tired of Unix dependencies in your Windows Environment to simply download web ar
             username=> "myuser",
             password=> "password1'
     }
+
+    pget {'Download requires Cookie and User-Agent':
+    	source	=> "http://crazyrobotsniffing.cookiecrying.com/fileIneed.exe",
+    	target	=> 'd:/stage/',
+    	headerHash => {
+    		'user-agent'=>'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
+    		'Cookie'	=> 'I has cookie;'
+    		}
+    }
