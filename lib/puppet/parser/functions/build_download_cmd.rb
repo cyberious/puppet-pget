@@ -7,21 +7,28 @@ Returns the powerhell command for downloading file, requires hash to form comman
         "given (#{args.size} for 1") if args.size != 1
     @cmd = "\$wc = New-Object System.Net.WebClient;"
     @params = {}
+
     begin
       @params = Hash.try_convert(args[0])
-
-      if @params[:username] or @params[:password]
-        @cmd += "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
-      end
-      if @params[:header]
-
-      end
-
-      @cmd += "\$wc.DownloadFile('#{@params[:source]}','#{@params[:target_file]}')"
-
-    rescue
+      rescue
       raise(Puppet::ParseError, "build_download_cmd(): requires hash as argument ")
     end
+
+    if @params['username'] and @params['password']
+      @cmd += "\$wc.Credentials = New-Object System.Net.NetworkCredential('#{@params['username']}','#{@params['password']}');"
+    end
+
+    if @params['header']
+      begin
+        @header = Hash.try_convert @params['header']
+          @header.each do |k,v|
+            @cmd += "\$wc.Headers.Add('#{k}','#{v}');"
+          end
+      rescue
+        raise(Puppet::ParserError,"Unable tp parse header options to build config")
+      end
+    end
+    @cmd += "\$wc.DownloadFile('#{@params['source']}','#{@params['target_file']}')"
     return @cmd
   end
 end

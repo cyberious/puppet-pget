@@ -9,7 +9,7 @@ describe 'pget' do
     it{
       should contain_exec('Download-puppet-3.4.1.msi').with({
         'provider' => 'powershell',
-        'command' => "\$wc = New-Object System.Net.WebClient; \$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+        'command' => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
       })
     }
   end
@@ -23,10 +23,6 @@ describe 'pget' do
       })
     }
   end
-
-
-
-
 
   ['ftp','sftp','ftps','https','http'].each do |protocol|
     describe "Download msi #{protocol}" do
