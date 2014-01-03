@@ -8,4 +8,4 @@ description 'Tired of Unix dependencies in your Windows Environment to simply do
 project_page 'http://github.com/cyberious/puppet-pget'
 
 ## Add dependencies, if any:
-dependency 'joshcooper/powershell', '>= 0.6.0'
+dependency 'joshcooper/powershell', '>= 0.0.6'
