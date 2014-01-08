@@ -39,7 +39,7 @@ define pget (
   $target      = undef, #: the target stage directory
   $username    = undef, #: Username to be passed
   $password    = undef, #: password needed,
-  $headerHash  = {}, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
+  $headerHash  = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
   ){
 
   validate_string($source)
@@ -57,10 +57,12 @@ define pget (
     validate_re($password,['(\w|\W)+'],"Password must be supplied")
     validate_string($username)
     validate_re($username,['(\w|\W)+'],"Username must be supplied")
-    $pass_cmd += "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
+    $pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
   }
 
-  $header_cmd = build_download_cmd($headerHash)
+  if $headerHash {
+    $header_cmd = build_header_cmd($headerHash)
+  }
   $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
 
   exec{"Download-${filename}":
