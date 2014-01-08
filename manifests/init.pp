@@ -50,15 +50,18 @@ define pget (
 
   $filename = pget_filename($source)
   $target_file = "${target}/${filename}"
-  if $password != undef or $username != undef {
+
+  $base_cmd = "\$wc = New-Object System.Net.WebClient;"
+  if $username or $password {
     validate_string($password)
     validate_re($password,['(\w|\W)+'],"Password must be supplied")
     validate_string($username)
     validate_re($username,['(\w|\W)+'],"Username must be supplied")
-    $cmd = build_download_cmd(hash(['source',$source,'target_file', $target_file,'header',$headerHash,'username',$username,'password',$password]))
-  }else{
-    $cmd = build_download_cmd(hash(['source',$source,'target_file', $target_file,'header',$headerHash]))
+    $pass_cmd += "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
   }
+
+  $header_cmd = build_download_cmd($headerHash)
+  $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
 
   exec{"Download-${filename}":
     provider  => powershell,
