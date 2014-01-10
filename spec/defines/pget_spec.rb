@@ -13,6 +13,15 @@ describe 'pget' do
       })
     }
   end
+  shared_examples 'with header' do |protocol|
+    let(:params){{:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software",:headerHash => {"Cookie"=>"C is for Cookie","user-agent"=>"Who dat"}}}
+    it{
+      should contain_exec('Download-puppet-3.4.1.msi').with({
+                                                                'provider' => 'powershell',
+                                                                'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Headers.Add('Cookie','C is for Cookie');\$wc.Headers.Add('user-agent','Who dat');\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+                                                            })
+    }
+  end
 
   shared_examples 'with user pass' do |protocol|
     let(:params){{:password => 'testme',:username => 'testuser',:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => "C:/software"}}
@@ -27,6 +36,9 @@ describe 'pget' do
   ['ftp','sftp','ftps','https','http'].each do |protocol|
     describe "Download msi #{protocol}" do
       include_examples 'without user pass',protocol
+    end
+    describe "Download msi with Headers for #{protocol}" do
+      include_examples 'with header',protocol
     end
     describe "Download msi #{protocol} with credentials" do
       include_examples 'with user pass',protocol

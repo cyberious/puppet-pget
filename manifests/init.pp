@@ -61,10 +61,11 @@ define pget (
   }
 
   if $headerHash {
+    debug("Attempting to build header command with ${headerHash}")
     $header_cmd = build_header_cmd($headerHash)
   }
   $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
-
+  debug("About to execute command ${cmd}")
   exec{"Download-${filename}":
     provider  => powershell,
     command   => $cmd,
