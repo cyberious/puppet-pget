@@ -43,33 +43,42 @@ define pget (
   ){
 
   validate_string($source)
-  validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
+  validate_re($source,['^s?ftp:','^https?:','^ftps?:','^puppet:'])
+
   if $::operatingsystem != 'windows'{
     fail("Unsupported OS ${::operatingsystem}")
   }
-
   $filename = pget_filename($source)
   $target_file = "${target}/${filename}"
 
-  $base_cmd = '$wc = New-Object System.Net.WebClient;'
-  if $username or $password {
-    validate_string($password)
-    validate_re($password,['(\w|\W)+'],'Password must be supplied')
-    validate_string($username)
-    validate_re($username,['(\w|\W)+'],'Username must be supplied')
-    $pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
-  }
+  if $source =~ /^puppet/ {
+    file{"Download-${filename}":
+      ensure  => file,
+      path    => $target_file,
+      source  => $source,
+    }
+  }else{
+    validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
+    $base_cmd = '$wc = New-Object System.Net.WebClient;'
+    if $username or $password {
+      validate_string($password)
+      validate_re($password,['(\w|\W)+'],'Password must be supplied')
+      validate_string($username)
+      validate_re($username,['(\w|\W)+'],'Username must be supplied')
+      $pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
+    }
 
-  if $headerHash {
-    debug("Attempting to build header command with ${headerHash}")
-    $header_cmd = build_header_cmd($headerHash)
-  }
-  $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
-  debug("About to execute command ${cmd}")
-  exec{"Download-${filename}":
-    provider  => powershell,
-    command   => $cmd,
-    unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
+    if $headerHash {
+      debug("Attempting to build header command with ${headerHash}")
+      $header_cmd = build_header_cmd($headerHash)
+    }
+    $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
+    debug("About to execute command ${cmd}")
+    exec{"Download-${filename}":
+      provider  => powershell,
+      command   => $cmd,
+      unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
+    }
   }
 
 }
