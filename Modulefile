@@ -1,5 +1,5 @@
 name    'cyberious-pget'
-version '0.1.3'
+version '0.1.4'
 source 'http://github.com/cyberious/puppet-pget'
 author 'Travis F'
 license 'Apache License, Version 2.0'
