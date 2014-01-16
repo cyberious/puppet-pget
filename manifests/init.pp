@@ -44,19 +44,19 @@ define pget (
 
   validate_string($source)
   validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
-  if $operatingsystem != 'windows'{
-    fail("Unsupported OS ${operatingsystem}")
+  if $::operatingsystem != 'windows'{
+    fail("Unsupported OS ${::operatingsystem}")
   }
 
   $filename = pget_filename($source)
   $target_file = "${target}/${filename}"
 
-  $base_cmd = "\$wc = New-Object System.Net.WebClient;"
+  $base_cmd = '$wc = New-Object System.Net.WebClient;'
   if $username or $password {
     validate_string($password)
-    validate_re($password,['(\w|\W)+'],"Password must be supplied")
+    validate_re($password,['(\w|\W)+'],'Password must be supplied')
     validate_string($username)
-    validate_re($username,['(\w|\W)+'],"Username must be supplied")
+    validate_re($username,['(\w|\W)+'],'Username must be supplied')
     $pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
   }
 
@@ -69,7 +69,7 @@ define pget (
   exec{"Download-${filename}":
     provider  => powershell,
     command   => $cmd,
-    unless  => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
+    unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
   }
 
 }
