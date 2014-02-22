@@ -1,5 +1,3 @@
-require 'uri'
-
 module Puppet::Parser::Functions
   newfunction(:pget_filename, :type  => :rvalue, :doc => <<-EOS
 Returns the filename of a path
@@ -8,7 +6,7 @@ Returns the filename of a path
     raise(Puppet::ParseError, "pget_filename(): Wrong number of arguments " +
         "given (#{args.size} for 1") if args.size != 1
     path = args[0]
-    return File.basename(URI(path))
+    return path[/.*\/(?<filename>[^\/#?]+)/, -1]
   end
 end
 
