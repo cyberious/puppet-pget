@@ -6,7 +6,8 @@ Returns the filename of a path
     raise(Puppet::ParseError, "pget_filename(): Wrong number of arguments " +
         "given (#{args.size} for 1") if args.size != 1
     path = args[0]
-    return File.basename(path)
+    filename = /.*\/(?<filename>[^\/#?]+)/.match(path)[:filename]
+    return filename
   end
 end
 
