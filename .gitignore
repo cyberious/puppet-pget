@@ -1,0 +1,8 @@
+.rspec
+.*.sw[op]
+.bundle/
+Gemfile.lock
+Gemfile.local
+.idea
+*.iml
+.vagrant
