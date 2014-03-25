@@ -2,11 +2,17 @@ source "https://rubygems.org"
 
 group :development, :test do
   gem 'rake'
-  gem 'rspec', "~> 2.11.0", :require => false
-  gem 'mocha', "~> 0.10.5", :require => false
+  gem 'rspec'
+  gem 'mocha'
   gem 'puppetlabs_spec_helper', :require => false
   gem 'rspec-puppet', :require => false
   gem 'puppet-lint'
+  gem 'rspec-system'
+  gem 'rspec-system-puppet'
+  gem 'rspec-system-serverspec'
+  gem 'serverspec'
+  gem 'beaker'
+  gem 'beaker-rspec'
 end
 
 facterversion = ENV['GEM_FACTER_VERSION']

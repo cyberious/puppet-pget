@@ -1,0 +1,16 @@
+HOSTS:
+  centos-64-x64:
+      roles:
+        - master
+      platform: el-6-x86_64
+      box : centos-64-x64-vbox4210-nocm
+      box_url : http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box
+      hypervisor : vagrant
+  w2k8r2:
+    roles:
+      - agent
+    platform: windows-2008r2-x86_64
+    box : win2008r2-x64-vbox4216-nocm
+    hypervisor: vagrant
+    box_url : http://int-resources.ops.puppetlabs.net/vagrant/win2008r2-x64-vbox4216-nocm.box
+
