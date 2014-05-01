@@ -14,6 +14,8 @@
 #   If authentications is required provide both username and password
 # [*password*]
 #   Optional only if username is not supplied
+# [*timeout*]
+#   Optional. Specifies the timeout duration. Default is 300 seconds.
 #
 # === Examples
 #
@@ -39,6 +41,7 @@ define pget (
   $target      = undef, #: the target stage directory
   $username    = undef, #: Username to be passed
   $password    = undef, #: password needed,
+  $timeout     = 300,   #: timeout
   $headerHash  = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
   ){
 
@@ -77,7 +80,8 @@ define pget (
     exec{"Download-${filename}":
       provider  => powershell,
       command   => $cmd,
-      unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
+      unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}",
+      timeout   => $timeout,
     }
   }
 
