@@ -1,5 +1,5 @@
 name    'cyberious-pget'
-version '0.1.4'
+version '0.1.5'
 source 'http://github.com/cyberious/puppet-pget'
 author 'Travis F'
 license 'Apache License, Version 2.0'
@@ -9,4 +9,4 @@ project_page 'http://github.com/cyberious/puppet-pget'
 
 ## Add dependencies, if any:
 dependency 'joshcooper/powershell', '>= 0.0.6'
-dependency 'puppetlabs/stdlib', '>= 4.1.0'
+dependency 'puppetlabs/stdlib', '>= 3.2.0'
