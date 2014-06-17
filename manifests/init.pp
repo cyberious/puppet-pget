@@ -10,6 +10,8 @@
 #   URL which you want to download from
 # [*target*]
 #   The stage directory where the file is to be downloaded
+# [*targetfilename*]
+#   The filename of the downloaded file. Overrides the filename provided by the server.
 # [*username*]
 #   If authentications is required provide both username and password
 # [*password*]
@@ -27,6 +29,13 @@
 # pget{'Download puppet':
 #   source  => "http://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",
 #   target  => "C:/software",
+#   username=> "myuser",
+#   password=> "password1'
+# }
+# pget{'Download puppet':
+#   source  => "http://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",
+#   target  => "C:/software",
+#   targetfilename => "my-puppet-install.msi",
 #   username=> "myuser",
 #   password=> "password1'
 # }
@@ -51,7 +60,13 @@ define pget (
   if $::operatingsystem != 'windows'{
     fail("Unsupported OS ${::operatingsystem}")
   }
-  $filename = pget_filename($source)
+  
+  if $targetfilename != undef {
+     $filename = $targetfilename
+  } else {
+	   $filename = pget_filename($source)
+  }
+  
   $target_file = "${target}/${filename}"
 
   if $source =~ /^puppet/ {
