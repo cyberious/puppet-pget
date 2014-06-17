@@ -92,7 +92,7 @@ define pget (
     }
     $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
     debug("About to execute command ${cmd}")
-    exec{"Download-${filename}":
+    exec{"Download-${filename}-to-${target}":
       provider  => powershell,
       command   => $cmd,
       unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}",
