@@ -1,0 +1,15 @@
+# Beaker vagrant directory
+.vagrant/
+
+# Mac hidden file
+.DS_store
+
+# IntelliJ
+.idea/*
+*.iml
+
+Gemfile.lock
+log
+
+# Puppet build directory
+pkg
