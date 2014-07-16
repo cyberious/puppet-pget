@@ -1,0 +1,38 @@
+clear
+$hashIt = @"
+using System.Security.Cryptography;
+using System.IO;
+using System.Text;
+
+namespace Cyberious.Pget {
+  public static class Utils{
+    public static string GetHash(string sourceFile){
+      var md5 = new MD5CryptoServiceProvider();
+      var bytes = File.ReadAllBytes(sourceFile);
+      var hashBytes = md5.ComputeHash(bytes);
+      var sb = new StringBuilder();
+      foreach (var hashBit in hashBytes)
+      {
+        sb.Append(hashBit.ToString("x2"));
+      }
+      return sb.ToString();
+    }  
+  }
+}
+"@
+
+$matchHash = '<%= @md5Hash %>'
+$file = '<%= @target_file %>'
+if ( Test-Path $file ){
+  Add-Type -TypeDefinition $hashIt -Language CSharp
+  $hash = [Cyberious.Pget.Utils]::GetHash($file)
+  if ( $hash -eq $matchHash -or $matchHash -eq '' ) {
+    exit 0  
+  }else {
+    Write-Debug "File exists but $matchHash != $hash"
+    exit 1
+  }
+}else{
+  Write-Debug "File does not exist"
+  exit 1
+}
