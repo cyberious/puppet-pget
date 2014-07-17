@@ -1,0 +1,11 @@
+$wc = New-Object System.Net.WebClient;
+<% if @headerHash
+    @headerHash.each do |k, v| -%>
+$wc.Headers.Add('<%= k %>','<%= v %>');
+<% end
+end -%>
+<% if @username && @password -%>
+$wc.Credentials = New-Object System.Net.NetworkCredential('<%= @username %>','<%= @password %>');
+<% end -%>
+$wc.DownloadFile('<%= @source %>','<%= @target_file %>');
+

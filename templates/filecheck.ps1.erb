@@ -1,4 +1,3 @@
-clear
 $hashIt = @"
 using System.Security.Cryptography;
 using System.IO;
@@ -16,7 +15,7 @@ namespace Cyberious.Pget {
         sb.Append(hashBit.ToString("x2"));
       }
       return sb.ToString();
-    }  
+    }
   }
 }
 "@
@@ -27,12 +26,11 @@ if ( Test-Path $file ){
   Add-Type -TypeDefinition $hashIt -Language CSharp
   $hash = [Cyberious.Pget.Utils]::GetHash($file)
   if ( $hash -eq $matchHash -or $matchHash -eq '' ) {
-    exit 0  
-  }else {
-    Write-Debug "File exists but $matchHash != $hash"
+    Write-Debug "File exists and matches"
+    exit 0
+  }else{
     exit 1
   }
 }else{
-  Write-Debug "File does not exist"
   exit 1
 }
