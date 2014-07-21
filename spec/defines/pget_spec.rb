@@ -84,4 +84,15 @@ describe 'pget' do
 
     }
   end
+  describe 'Download file and specify the target filename' do
+    let(:params){{:password => 'testme',:username => 'testuser',:source => "https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi",:target => targetPath, :targetfilename => 'puppet.msi'}}
+    it{
+      should contain_exec("Download-puppet.msi-to-#{targetPath}").with(
+                 {
+                 'provider' => 'powershell',
+                 'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('testuser','testme');\$wc.DownloadFile('https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet.msi')"
+                 }
+             )
+    }
+  end
 end
