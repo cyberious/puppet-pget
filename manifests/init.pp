@@ -46,12 +46,13 @@
 # Copyright 2013 Travis F, unless otherwise noted.
 #
 define pget (
-  $source,              #: the source file location, supports local files, http://, https://, ftp://
-  $target      = undef, #: the target stage directory
-  $username    = undef, #: Username to be passed
-  $password    = undef, #: password needed,
-  $timeout     = 300,   #: timeout
-  $headerHash  = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
+  $source,                 #: the source file location, supports local files, http://, https://, ftp://
+  $target         = undef, #: the target stage directory,
+  $targetfilename = undef, #: desired filename, will be infered by the source if not defined.
+  $username       = undef, #: Username to be passed
+  $password       = undef, #: password needed,
+  $timeout        = 300,   #: timeout
+  $headerHash     = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
   ){
 
   validate_string($source)
