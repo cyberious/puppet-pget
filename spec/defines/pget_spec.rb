@@ -95,4 +95,28 @@ describe 'pget' do
              )
     }
   end
+  describe 'Download file and overwrite even if target file is already present' do
+    let(:params){{:password => 'testme',:username => 'testuser',:source => 'https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',:target => targetPath, :targetfilename => 'puppet.msi', :overwrite => 'true'}}
+    it{
+      should contain_exec("Download-puppet.msi-to-#{targetPath}").with(
+                 {
+                 'provider' => 'powershell',
+                 'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('testuser','testme');\$wc.DownloadFile('https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet.msi')",
+                 'unless' => ''
+                 }
+             )
+    }
+  end
+  describe 'Do not download file if target file is already present' do
+    let(:params){{:password => 'testme',:username => 'testuser',:source => 'https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',:target => targetPath, :targetfilename => 'puppet.msi'}}
+    it{
+      should contain_exec("Download-puppet.msi-to-#{targetPath}").with(
+                 {
+                 'provider' => 'powershell',
+                 'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Credentials = New-Object System.Net.NetworkCredential('testuser','testme');\$wc.DownloadFile('https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet.msi')",
+                 'unless' => "if(Test-Path -Path \"#{targetPath}/puppet.msi\" ){ exit 0 }else{exit 1}"
+                 }
+             )
+    }
+  end
 end
