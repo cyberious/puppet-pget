@@ -1,0 +1,44 @@
+{
+    "name": "cyberious-pget",
+    "version": "1.0.1",
+    "author": "Travis Fields",
+    "summary": "Powershell Alternative to wget or curl",
+    "license": "ALv2",
+    "source": "http://github.com/cyberious/puppet-pget",
+    "project_page": "http://github.com/cyberious/puppet-pget",
+    "issues_url": "https://github.com/cyberious/puppet-pget/issues",
+    "description": "Tired of Unix dependencies in your Windows Environment to simply download web artifacts on your servers, use PGet it utilizes Powershell as and removes other dependencies",
+    "dependencies": [
+        {
+            "name": "puppetlabs/powershell",
+            "version_requirement": ">=1.0.2 <2.0.0"
+        },
+        {
+            "name": "puppetlabs/stdlib",
+            "version_requirement": ">=3.2.0 <5.0.0"
+        }
+    ],
+    "operatingsystem_support": [
+        {
+            "operatingsystem": "Windows",
+            "operatingsystemrelease": [
+                "Server 2008",
+                "Server 2008 R2",
+                "Server 2012",
+                "Server 2012 R2",
+                "7",
+                "8"
+            ]
+        }
+    ],
+    "requirements": [
+        {
+            "name": "pe",
+            "version_requirement": "3.x"
+        },
+        {
+            "name": "puppet",
+            "version_requirement": ">= 3.3.0"
+        }
+    ]
+}

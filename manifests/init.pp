@@ -53,7 +53,7 @@ define pget (
   $password       = undef, #: password needed,
   $timeout        = 300,   #: timeout
   $headerHash     = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
-  ){
+){
 
   validate_string($source)
   validate_re($source,['^s?ftp:','^https?:','^ftps?:','^puppet:'])
@@ -61,22 +61,22 @@ define pget (
   if $::operatingsystem != 'windows'{
     fail("Unsupported OS ${::operatingsystem}")
   }
-  
+
   if $targetfilename != undef {
-     $filename = $targetfilename
+    $filename = $targetfilename
   } else {
-	   $filename = pget_filename($source)
+    $filename = pget_filename($source)
   }
-  
+
   $target_file = "${target}/${filename}"
 
   if $source =~ /^puppet/ {
-    file{"Download-${filename}":
-      ensure  => file,
-      path    => $target_file,
-      source  => $source,
+    file{ "Download-${filename}":
+      ensure => file,
+      path   => $target_file,
+      source => $source,
     }
-  }else{
+  } else{
     validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
     $base_cmd = '$wc = New-Object System.Net.WebClient;'
     if $username or $password {
@@ -93,11 +93,11 @@ define pget (
     }
     $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
     debug("About to execute command ${cmd}")
-    exec{"Download-${filename}-to-${target}":
-      provider  => powershell,
-      command   => $cmd,
-      unless    => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}",
-      timeout   => $timeout,
+    exec{ "Download-${filename}-to-${target}":
+      provider => powershell,
+      command  => $cmd,
+      unless   => "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}",
+      timeout  => $timeout,
     }
   }
 
