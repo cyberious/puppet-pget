@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:pget_filename, :type  => :rvalue, :doc => <<-EOS
+  newfunction(:pget_filename, :type => :rvalue, :doc => <<-EOS
 Returns the filename of a path
   EOS
   ) do |args|

@@ -51,7 +51,7 @@
 # Copyright 2013 Travis F, unless otherwise noted.
 #
 define pget (
-  $source, # : the source file location, supports local files, http://, https://, ftp://
+  $source,                 # : the source file location, supports local files, http://, https://, ftp://
   $target         = undef, # : the target stage directory,
   $targetfilename = undef, # : desired filename, will be infered by the source if not defined.
   $username       = undef, # : Username to be passed
@@ -86,16 +86,13 @@ define pget (
   }
 
   if $source =~ /^puppet/ {
-    file { "Download-${filename}":
+    file{ "Download-${filename}":
       ensure => file,
       path   => $target_file,
       source => $source,
     }
-  } else {
-    validate_re($source, [
-      '^s?ftp:',
-      '^https?:',
-      '^ftps?:'])
+  } else{
+    validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
     $base_cmd = '$wc = New-Object System.Net.WebClient;'
 
     if $username or $password {
@@ -110,6 +107,10 @@ define pget (
       debug("Attempting to build header command with ${headerHash}")
       $header_cmd = build_header_cmd($headerHash)
     }
+    else {
+      $header_cmd = ''
+    }
+
     $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
     debug("About to execute command ${cmd}")
 

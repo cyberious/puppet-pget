@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:build_header_cmd, :type  => :rvalue, :doc => <<-EOS
+  newfunction(:build_header_cmd, :type => :rvalue, :doc => <<-EOS
 Returns the powerhell command for downloading file, requires hash to form command
   EOS
   ) do |args|
@@ -9,7 +9,7 @@ Returns the powerhell command for downloading file, requires hash to form comman
 
     @@header = args[0]
     debug("#{@@header} was passed to function")
-    @@header.each do |k,v|
+    @@header.each do |k, v|
       @@cmd += "\$wc.Headers.Add('#{k}','#{v}');"
       debug("#{@@cmd} is built so far")
     end
