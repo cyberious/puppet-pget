@@ -71,17 +71,16 @@ define pget (
     fail("Unsupported OS ${::operatingsystem}")
   }
 
-  $_filename =  $targetfilename  ? {
-    undef => pget_filename($source),
+  $_filename = $targetfilename  ? {
+    undef   => pget_filename($source),
     default => $targetfilename,
   }
 
   $_target_file = "${target}/${_filename}"
 
-  if $overwrite {
-    $_unlessClause = ''
-  } else {
-    $_unlessClause = "if(Test-Path -Path \"${_target_file}\" ){ exit 0 }else{exit 1}"
+  $_unlessClause = $overwrite ? {
+    true    => '',
+    default =>  "if(Test-Path -Path \"${_target_file}\" ){ exit 0 }else{exit 1}"
   }
 
   if $source =~ /^puppet/ {

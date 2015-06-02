@@ -96,7 +96,7 @@ describe 'pget' do
     }
   end
   describe 'Download file and overwrite even if target file is already present' do
-    let(:params){{:password => 'testme',:username => 'testuser',:source => 'https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',:target => targetPath, :targetfilename => 'puppet.msi', :overwrite => 'true'}}
+    let(:params){{:password => 'testme',:username => 'testuser',:source => 'https://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',:target => targetPath, :targetfilename => 'puppet.msi', :overwrite => true}}
     it{
       should contain_exec("Download-puppet.msi-to-#{targetPath}").with(
                  {
