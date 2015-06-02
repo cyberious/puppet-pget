@@ -99,6 +99,8 @@ define pget (
       validate_string($username)
       validate_re($username, ['(\w|\W)+'], 'Username must be supplied')
       $_pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
+    } else{
+      $_pass_cmd = ''
     }
 
     $_header_cmd =  $headerHash ? {
