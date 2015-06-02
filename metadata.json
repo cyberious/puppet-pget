@@ -1,9 +1,9 @@
 {
     "name": "cyberious-pget",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "author": "Travis Fields",
     "summary": "Powershell Alternative to wget or curl",
-    "license": "ALv2",
+    "license": "Apache-2.0",
     "source": "http://github.com/cyberious/puppet-pget",
     "project_page": "http://github.com/cyberious/puppet-pget",
     "issues_url": "https://github.com/cyberious/puppet-pget/issues",

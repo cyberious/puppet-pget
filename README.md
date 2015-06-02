@@ -13,6 +13,7 @@ Tired of Unix dependencies in your Windows Environment to simply download web ar
 
 ##Module Description
 Use `pget` it utilizes Powershell and removes other dependencies
+
 ### Begining with pget
 
     pget{'Download puppet':
@@ -54,7 +55,7 @@ The source file location, supports local files, http://, https://, ftp://, puppe
  No default value, the download target directory,
 
 ####`targetfilename` 
-Desired filename, will be infered by the source if not defined.
+Desired filename, will be inferred by the source if not defined.
 
 ####`username`           
 Username to be passed
@@ -66,7 +67,10 @@ For usage when a credential needs to be set i.e. ftp
 How long we should allow the download to take before timing out and exiting process, default 300
 
 ####`headerHash` 
-Hash containing header information such as user-agent, cookie and others, directly passed to #C 
+Hash containing header information such as user-agent, cookie and others, directly passed to #C
+ 
+####`overwrite`
+Whether to force the download even if file already exists
 
 ##Reference
 [WebClient API](http://msdn.microsoft.com/en-us/library/system.net.webclient.headers(v=vs.110).aspx)
