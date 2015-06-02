@@ -101,12 +101,9 @@ define pget (
       $_pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
     }
 
-    if $headerHash {
-      debug("Attempting to build header command with ${headerHash}")
-      $_header_cmd = build_header_cmd($headerHash)
-    }
-    else {
-      $_header_cmd = ''
+    $_header_cmd =  $headerHash ? {
+      undef   => '',
+      default => build_header_cmd($headerHash)
     }
 
     $cmd = "${_base_cmd}${_header_cmd}${_pass_cmd}\$wc.DownloadFile('${source}','${_target_file}')"
