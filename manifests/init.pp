@@ -76,46 +76,46 @@ define pget (
     default => $targetfilename,
   }
 
-  $target_file = "${target}/${_filename}"
+  $_target_file = "${target}/${_filename}"
 
   if $overwrite {
-    $unlessClause = ''
+    $_unlessClause = ''
   } else {
-    $unlessClause = "if(Test-Path -Path \"${target_file}\" ){ exit 0 }else{exit 1}"
+    $_unlessClause = "if(Test-Path -Path \"${_target_file}\" ){ exit 0 }else{exit 1}"
   }
 
   if $source =~ /^puppet/ {
     file{ "Download-${_filename}":
       ensure => file,
-      path   => $target_file,
+      path   => $_target_file,
       source => $source,
     }
   } else{
     validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
-    $base_cmd = '$wc = New-Object System.Net.WebClient;'
+    $_base_cmd = '$wc = New-Object System.Net.WebClient;'
 
     if $username or $password {
       validate_string($password)
       validate_re($password, ['(\w|\W)+'], 'Password must be supplied')
       validate_string($username)
       validate_re($username, ['(\w|\W)+'], 'Username must be supplied')
-      $pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
+      $_pass_cmd = "\$wc.Credentials = New-Object System.Net.NetworkCredential('${username}','${password}');"
     }
 
     if $headerHash {
       debug("Attempting to build header command with ${headerHash}")
-      $header_cmd = build_header_cmd($headerHash)
+      $_header_cmd = build_header_cmd($headerHash)
     }
     else {
-      $header_cmd = ''
+      $_header_cmd = ''
     }
 
-    $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
+    $cmd = "${_base_cmd}${_header_cmd}${_pass_cmd}\$wc.DownloadFile('${source}','${_target_file}')"
     debug("About to execute command ${cmd}")
     exec{ "Download-${_filename}-to-${target}":
       provider => powershell,
       command  => $cmd,
-      unless   => $unlessClause,
+      unless   => $_unlessClause,
       timeout  => $timeout,
     }
   }
