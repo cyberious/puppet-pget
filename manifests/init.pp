@@ -71,13 +71,12 @@ define pget (
     fail("Unsupported OS ${::operatingsystem}")
   }
 
-  if $targetfilename != undef {
-    $filename = $targetfilename
-  } else {
-    $filename = pget_filename($source)
+  $_filename =  $targetfilename  ? {
+    undef => pget_filename($source),
+    default => $targetfilename,
   }
 
-  $target_file = "${target}/${filename}"
+  $target_file = "${target}/${_filename}"
 
   if $overwrite {
     $unlessClause = ''
@@ -86,7 +85,7 @@ define pget (
   }
 
   if $source =~ /^puppet/ {
-    file{ "Download-${filename}":
+    file{ "Download-${_filename}":
       ensure => file,
       path   => $target_file,
       source => $source,
@@ -113,7 +112,7 @@ define pget (
 
     $cmd = "${base_cmd}${header_cmd}${pass_cmd}\$wc.DownloadFile('${source}','${target_file}')"
     debug("About to execute command ${cmd}")
-    exec{ "Download-${filename}-to-${target}":
+    exec{ "Download-${_filename}-to-${target}":
       provider => powershell,
       command  => $cmd,
       unless   => $unlessClause,
