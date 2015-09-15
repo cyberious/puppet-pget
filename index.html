@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Puppet-pget by cyberious</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Puppet-pget</h1>
+        <h2>pget - Module for downloading files onto a Windows system</h2>
+        <a href="https://github.com/cyberious/puppet-pget" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="pget" class="anchor" href="#pget" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>pget</code>
+</h1>
+
+<p><a href="https://travis-ci.org/cyberious/puppet-pget"><img src="https://travis-ci.org/cyberious/puppet-pget.png?branch=master" alt="Build Status"></a></p>
+
+<h4>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of Contents</h4>
+
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#module-description">Module Description</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#reference">Reference</a></li>
+</ol>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>Tired of Unix dependencies in your Windows Environment to simply download web artifacts on your servers. </p>
+
+<h2>
+<a id="module-description" class="anchor" href="#module-description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module Description</h2>
+
+<p>Use <code>pget</code> it utilizes Powershell and removes other dependencies</p>
+
+<h3>
+<a id="begining-with-pget" class="anchor" href="#begining-with-pget" aria-hidden="true"><span class="octicon octicon-link"></span></a>Begining with pget</h3>
+
+<pre><code>pget{'Download puppet':
+    source  =&gt; 'http://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',
+    target  =&gt; 'C:/software',
+}
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="authentication-of-your-request" class="anchor" href="#authentication-of-your-request" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authentication of your request</h3>
+
+<pre><code>pget{'Download puppet':
+        source   =&gt; 'http://downloads.puppetlabs.com/windows/puppet-3.4.1.msi',
+        target   =&gt; 'C:/software',
+        username =&gt; 'myuser',
+        password =&gt; 'password1'
+}
+</code></pre>
+
+<h3>
+<a id="injecting-cookie-string" class="anchor" href="#injecting-cookie-string" aria-hidden="true"><span class="octicon octicon-link"></span></a>Injecting cookie string</h3>
+
+<p>If you need to inject a cookie or other header information you can provide that info in the <code>headerHash</code> parameter</p>
+
+<pre><code>pget {'Download requires Cookie and User-Agent':
+    source      =&gt; 'http://crazyrobotsniffing.cookiecrying.com/fileIneed.exe',
+    target      =&gt; 'd:/stage/',
+    headerHash  =&gt; {
+        'user-agent' =&gt;'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
+        'Cookie'     =&gt; 'I has cookie;'
+        }
+}
+</code></pre>
+
+<h2>
+<a id="parameters" class="anchor" href="#parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parameters</h2>
+
+<h4>
+<a id="source" class="anchor" href="#source" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>source</code>
+</h4>
+
+<p>The source file location, supports local files, http://, https://, ftp://, puppet://</p>
+
+<h4>
+<a id="target" class="anchor" href="#target" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>target</code>
+</h4>
+
+<p>No default value, the download target directory,</p>
+
+<h4>
+<a id="targetfilename" class="anchor" href="#targetfilename" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>targetfilename</code>
+</h4>
+
+<p>Desired filename, will be inferred by the source if not defined.</p>
+
+<h4>
+<a id="username" class="anchor" href="#username" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>username</code>
+</h4>
+
+<p>Username to be passed</p>
+
+<h4>
+<a id="password" class="anchor" href="#password" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>password</code>
+</h4>
+
+<p>For usage when a credential needs to be set i.e. ftp</p>
+
+<h4>
+<a id="timeout" class="anchor" href="#timeout" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>timeout</code>
+</h4>
+
+<p>How long we should allow the download to take before timing out and exiting process, default 300</p>
+
+<h4>
+<a id="headerhash" class="anchor" href="#headerhash" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>headerHash</code>
+</h4>
+
+<p>Hash containing header information such as user-agent, cookie and others, directly passed to #C</p>
+
+<h4>
+<a id="overwrite" class="anchor" href="#overwrite" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>overwrite</code>
+</h4>
+
+<p>Whether to force the download even if file already exists</p>
+
+<h2>
+<a id="reference" class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<p><a href="http://msdn.microsoft.com/en-us/library/system.net.webclient.headers(v=vs.110).aspx">WebClient API</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/cyberious/puppet-pget/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/cyberious/puppet-pget/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/cyberious/puppet-pget"></a> is maintained by <a href="https://github.com/cyberious">cyberious</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
