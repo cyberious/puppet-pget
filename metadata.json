@@ -5,7 +5,7 @@
     "summary": "Powershell Alternative to wget or curl",
     "license": "Apache-2.0",
     "source": "http://github.com/cyberious/puppet-pget",
-    "project_page": "http://github.com/cyberious/puppet-pget",
+    "project_page": "http://cyberious.github.io/puppet-pget/",
     "issues_url": "https://github.com/cyberious/puppet-pget/issues",
     "description": "Tired of Unix dependencies in your Windows Environment to simply download web artifacts on your servers, use PGet it utilizes Powershell as and removes other dependencies",
     "dependencies": [
