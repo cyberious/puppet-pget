@@ -58,9 +58,11 @@ define pget (
   $password       = undef, #: password needed,
   $timeout        = 300,   #: timeout
   $headerHash     = undef, #: additional has parameters for the download of the file, i.e. user-agent, Cookie
-  $overwrite      = false, # : if the target file should be overwritten (if already present)
+  $overwrite      = false, #: if the target file should be overwritten (if already present)
+  $ignore_proxy   = false, #: check if system proxy should ignored 
 ) {
   validate_string($source)
+  validate_bool($ignore_proxy)
   validate_re($source, [
     '^s?ftp:',
     '^https?:',
@@ -91,7 +93,11 @@ define pget (
     }
   } else{
     validate_re($source,['^s?ftp:','^https?:','^ftps?:'])
-    $_base_cmd = '$wc = New-Object System.Net.WebClient;'
+    if $ignore_proxy == true {
+      $_base_cmd = '$wc = New-Object System.Net.WebClient;$wc.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy();'
+    } else {
+      $_base_cmd = '$wc = New-Object System.Net.WebClient;'
+    }
 
     if $username or $password {
       validate_string($password)

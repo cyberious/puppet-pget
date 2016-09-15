@@ -23,7 +23,6 @@ describe 'pget' do
                                                                              })
     }
   end
-
   shared_examples 'with user pass' do |protocol|
     let(:params) { {:password => 'testme', :username => 'testuser', :source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi", :target => targetPath} }
     it {
@@ -33,6 +32,25 @@ describe 'pget' do
                                                                              })
     }
   end
+  shared_examples 'with ignore_proxy' do |protocol|
+    let(:params) { {:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi", :target => targetPath, :ignore_proxy => false } }
+    it {
+      is_expected.to contain_exec("Download-puppet-3.4.1.msi-to-#{targetPath}").with({
+                                                                                 'provider' => 'powershell',
+                                                                                 'command' => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+                                                                             })
+    }
+  end
+  shared_examples 'without ignore_proxy' do |protocol|
+    let(:params) { {:source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi", :target => targetPath, :ignore_proxy => true } }
+    it {
+      is_expected.to contain_exec("Download-puppet-3.4.1.msi-to-#{targetPath}").with({
+                                                                                 'provider' => 'powershell',
+                                                                                 'command' => "\$wc = New-Object System.Net.WebClient;\$wc.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy();\$wc.DownloadFile('#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi','C:/software/puppet-3.4.1.msi')"
+                                                                             })
+    }
+  end
+
 
   %w(ftp sftp ftps https http).each do |protocol|
     describe "Download msi #{protocol}" do
@@ -44,6 +62,13 @@ describe 'pget' do
     describe "Download msi #{protocol} with credentials" do
       include_examples 'with user pass', protocol
     end
+    describe "Download without ignore_proxy" do
+      include_examples 'without ignore_proxy', protocol
+    end
+    describe "Download with ignore proxy" do
+      include_examples 'with ignore_proxy', protocol
+    end
+
     describe "Download via #{protocol} without password" do
       let(:params) { {:username => 'testuser', :source => "#{protocol}://downloads.puppetlabs.com/windows/puppet-3.4.1.msi", :target => targetPath} }
       it {
