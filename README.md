@@ -72,6 +72,9 @@ Hash containing header information such as user-agent, cookie and others, direct
 ####`overwrite`
 Whether to force the download even if file already exists
 
+####`ingore_proxy`
+Ignore the system proxy when set to `true`.
+
 ##Reference
 [WebClient API](http://msdn.microsoft.com/en-us/library/system.net.webclient.headers(v=vs.110).aspx)
   
